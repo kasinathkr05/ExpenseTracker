@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+impohow rt { useEffect, useState } from 'react'
 
 const API = 'http://localhost:4000'
 
-function App() {
+function App() { 
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(true)
   const [form, setForm] = useState({
@@ -12,6 +12,14 @@ function App() {
     description: '',
     date: new Date().toISOString().slice(0, 10),
   })
+const [editingId, setEditingId] = useState(null)
+const [editForm, setEditForm] = useState({
+  type: 'expense',
+  amount: '',
+  category: '',
+  description: '',
+  date: ''
+})
 
   const loadTransactions = async () => {
     try {
@@ -75,7 +83,64 @@ function App() {
     }
   }
 
-  return (
+  const deleteTransaction = async (id) => {
+  if (!confirm('Delete this transaction?')) return
+
+  try {
+    const res = await fetch(`${API}/api/transactions/${id}`, {
+      method: 'DELETE',
+    })
+
+    if (!res.ok) {
+      throw new Error('Failed to delete transaction')
+    }
+
+    await loadTransactions()
+  } catch (error) {
+    console.error(error)
+    alert('Could not delete transaction')
+  }
+}
+
+const startEdit = (transaction) => {
+  setEditingId(transaction.id)
+  setEditForm({
+    type: transaction.type,
+    amount: transaction.amount,
+    category: transaction.category,
+    description: transaction.description || '',
+    date: transaction.date,
+})
+}
+const saveEdit = async (e) => {
+  e.preventDefault()
+
+  try {
+    const res = await fetch(`${API}/api/transactions/${editingId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...editForm,
+        amount: Number(editForm.amount),
+      }),
+    })
+
+    if (!res.ok) {
+      throw new Error('Failed to update transaction')
+    }
+
+    setEditingId(null)
+    await loadTransactions()
+  } catch (error) {
+    console.error(error)
+    alert('Could not update transaction')
+  }
+}
+return (
+    
+  <div className="min-h-screen ...
     <div className="min-h-screen bg-slate-100 p-6">
       <div className="mx-auto max-w-6xl">
 
