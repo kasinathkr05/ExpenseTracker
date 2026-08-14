@@ -264,56 +264,131 @@ return (
                 No transactions yet.
               </p>
             ) : (
-              <div className="space-y-3">
-                {transactions.map((transaction) => (
-                  <div
-                    key={transaction.id}
-                    className="flex items-center justify-between rounded-xl border border-slate-100 p-4"
+        <div className="space-y-3">
+          {transactions.map((transaction) => (
+            <div
+              key={transaction.id}
+              className="rounded-xl border border-slate-100 p-4"
+            >
+              {editingId === transaction.id ? (
+                <form onSubmit={saveEdit} className="space-y-3">
+                  <select
+                    value={editForm.type}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, type: e.target.value })
+                    }
+                    className="w-full rounded-lg border border-slate-300 p-3"
                   >
-                    <div>
-                      <p className="font-semibold text-slate-800">
-                        {transaction.description || transaction.category}
-                      </p>
+                    <option value="expense">Expense</option>
+                    <option value="income">Income</option>
+                  </select>
 
-                      <p className="text-sm text-slate-500">
-                        {transaction.category} · {transaction.date}
-                      </p>
-                    </div>
+                  <input
+                    type="number"
+                    placeholder="Amount"
+                    value={editForm.amount}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, amount: e.target.value })
+                    }
+                    className="w-full rounded-lg border border-slate-300 p-3"
+                  />
 
-                    <p
-                      className={`font-bold ${
-                        transaction.type === 'income'
-                          ? 'text-green-600'
-                          : 'text-red-600'
-                      }`}
+                  <input
+                    type="text"
+                    placeholder="Category"
+                    value={editForm.category}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, category: e.target.value })
+                    }
+                    className="w-full rounded-lg border border-slate-300 p-3"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Description"
+                    value={editForm.description}
+                    onChange={(e) =>
+                      setEditForm({
+                        ...editForm,
+                        description: e.target.value,
+                      })
+                    }
+                    className="w-full rounded-lg border border-slate-300 p-3"
+                  />
+
+                  <input
+                    type="date"
+                    value={editForm.date}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, date: e.target.value })
+                    }
+                    className="w-full rounded-lg border border-slate-300 p-3"
+                  />
+
+                  <div className="flex gap-2">
+                    <button
+                      type="submit"
+                      className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
                     >
-                      {transaction.type === 'income' ? '+' : '-'}
-                      ₹{Number(transaction.amount).toFixed(2)}
+                      Save
+                    </button>
 
-                    </p>
-<div className="flex gap-2 mt-2">
-  <button
-    type="button"
-    onClick={() => startEdit(transaction)}
-    className="text-blue-600 text-sm"
-  >
-    Edit
-  </button>
-
-  <button
-    type="button"
-    onClick={() => deleteTransaction(transaction.id)}
-    className="text-red-600 text-sm"
-  >
-    Delete
-  </button>
-</div>
+                    <button
+                      type="button"
+                      onClick={() => setEditingId(null)}
+                      className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-700"
+                    >
+                      Cancel
+                    </button>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                </form>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-semibold text-slate-800">
+                      {transaction.description || transaction.category}
+                    </p>
 
+                    <p className="text-sm text-slate-500">
+                      {transaction.category} · {transaction.date}
+                    </p>
+                  </div>
+
+                  <p
+                    className={`font-bold ${
+                      transaction.type === "income"
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {transaction.type === "income" ? "+" : "-"}₹
+                    {Number(transaction.amount).toFixed(2)}
+                  </p>
+
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => startEdit(transaction)}
+                      className="text-blue-600 text-sm"
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => deleteTransaction(transaction.id)}
+                      className="text-red-600 text-sm"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
         </div>
       </div>
     </div>
