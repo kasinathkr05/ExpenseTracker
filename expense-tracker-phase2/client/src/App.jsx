@@ -1,5 +1,4 @@
-impohow rt { useEffect, useState } from 'react'
-
+import { useEffect, useState } from 'react'
 const API = 'http://localhost:4000'
 
 function App() { 
@@ -140,7 +139,7 @@ const saveEdit = async (e) => {
 }
 return (
     
-  <div className="min-h-screen ...
+    <div className="min-h-screen">
     <div className="min-h-screen bg-slate-100 p-6">
       <div className="mx-auto max-w-6xl">
 
@@ -290,7 +289,25 @@ return (
                     >
                       {transaction.type === 'income' ? '+' : '-'}
                       ₹{Number(transaction.amount).toFixed(2)}
+
                     </p>
+<div className="flex gap-2 mt-2">
+  <button
+    type="button"
+    onClick={() => startEdit(transaction)}
+    className="text-blue-600 text-sm"
+  >
+    Edit
+  </button>
+
+  <button
+    type="button"
+    onClick={() => deleteTransaction(transaction.id)}
+    className="text-red-600 text-sm"
+  >
+    Delete
+  </button>
+</div>
                   </div>
                 ))}
               </div>
@@ -300,6 +317,7 @@ return (
         </div>
       </div>
     </div>
+  </div>
   )
 }
 
