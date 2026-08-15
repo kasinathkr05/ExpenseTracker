@@ -46,7 +46,14 @@ const [editForm, setEditForm] = useState({
 
   const balance = income - expenses
 
-  const addTransaction = async (e) => {
+const [typeFilter, setTypeFilter] = useState('all')
+const filteredTransactions =
+  typeFilter === 'all'
+    ? transactions
+    : transactions.filter(
+        (transaction) => transaction.type === typeFilter
+      )  
+const addTransaction = async (e) => {
     e.preventDefault()
 
     if (!form.amount || Number(form.amount) <= 0) return
@@ -265,7 +272,7 @@ return (
               </p>
             ) : (
         <div className="space-y-3">
-          {transactions.map((transaction) => (
+          {filteredTransactions.map((transaction) => (
             <div
               key={transaction.id}
               className="rounded-xl border border-slate-100 p-4"
